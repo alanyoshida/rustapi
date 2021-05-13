@@ -1,0 +1,7 @@
+resources:
+- ./../../base
+
+patches:
+- deployment-patch.yaml
+
+namePrefix: stag-

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rustapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rustapi
+  template:
+    metadata:
+      labels:
+        app: rustapi
+    spec:
+      containers:
+      - name: rustapi
+        image: alanyoshida/rustapi:latest
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          initialDelaySeconds: 10
+          httpGet:
+            path: /health-check/readiness
+            port: 8080
+        readinessProbe:
+          initialDelaySeconds: 10
+          httpGet:
+            path: /health-check/readiness
+            port: 8080
+        env:
+        - name: ENVIRONMENT
+          value: "local"
+        resources:
+          limits:
+            cpu: 30m
+            memory: 40Mi
+          requests:
+            cpu: 15m
+            memory: 20Mi

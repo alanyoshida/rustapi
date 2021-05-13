@@ -1,0 +1,70 @@
+{{- $root := . -}}
+{{- $name := default $root.Values.name .Chart.Name -}}
+{{- $namespace := default $name $root.Values.namespace -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $name }}
+  namespace: {{ $namespace }}
+  labels:
+    app: {{ $name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ $name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ $name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $name }}
+        revision: {{ .Release.Revision | quote }}
+      annotations:
+{{- if .Values.annotations }}
+{{ toYaml .Values.annotations | indent 8 }}
+{{- end }}
+    spec:
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      containers:
+      - name: {{ $name }}
+        image: {{ .Values.image }}
+        ports:
+        - name: application
+          containerPort: {{ .Values.port }}
+
+{{- if .Values.customArgsApp }}
+        args:
+{{ toYaml .Values.customArgsApp | indent 8 }}
+{{- end }}
+
+{{- if .Values.probes }}
+{{ toYaml .Values.probes | indent 8 }}
+{{- end }}
+
+{{- if .Values.resources }}
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+{{- end }}
+
+{{- if .Values.securityContextEnabled }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+          readOnlyRootFilesystem: true
+{{- end }}
+
+{{- if .Values.envs }}
+        env:
+{{ toYaml .Values.envs | indent 10 }}
+{{- end }}
+
+{{ if .Values.volumeMounts }}
+        volumeMounts:
+{{ toYaml .Values.volumeMounts | indent 8 }}
+{{- end }}
+
+{{- if .Values.volumes }}
+      volumes:
+{{ toYaml .Values.volumes | indent 6 }}
+{{- end }}

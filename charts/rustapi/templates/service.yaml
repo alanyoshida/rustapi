@@ -1,0 +1,20 @@
+{{- $root := . -}}
+{{- $name := default $root.Values.name .Chart.Name -}}
+{{- $namespace := default $name $root.Values.namespace -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}
+  namespace: {{ $namespace }}
+  labels:
+    app: {{ $name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+spec:
+  ports:
+  - name: application
+    port: {{ default 8080 .Values.port }}
+    targetPort: application
+    protocol: TCP
+  selector:
+    app: {{ $name }}
+  type: {{ default "ClusterIP" .Values.serviceType }}

@@ -1,0 +1,53 @@
+name: "rustapi"
+namespace: "rustapi"
+port: 8080
+image: alanyoshida/rustapi
+serviceType: "ClusterIP"
+terminationGracePeriodSeconds: 10
+securityContextEnabled: "false"
+customArgsApp: []
+envs: []
+annotations: []
+
+resources:
+  limits:
+    # resources.limits.cpu -- Specifies cpu limit
+    cpu: 30m
+    # resources.limits.memory -- Specifies memory limit
+    memory: 40Mi
+  requests:
+    # resources.requests.cpu -- Specifies initial cpu request
+    cpu: 15m
+    # resources.requests.memory --  Specifies initial memory request
+    memory: 20Mi
+
+probes:
+  readinessProbe:
+    httpGet:
+      path: /health-check/readiness
+      port: 8080
+    ### Number of seconds after the container has started before liveness probes are initiated
+    initialDelaySeconds: 5
+    ### Number of seconds after which the probe times out
+    timeoutSeconds: 3
+    ### How often (in seconds) to perform the probe
+    periodSeconds: 5
+    ### Minimum consecutive failures for the probe to be considered failed after having succeeded
+    failureThreshold: 10
+    ### Minimum consecutive successes for the probe to be considered successful after having failed
+    successThreshold: 1
+
+  livenessProbe:
+    httpGet:
+      path: /health-check/liveness
+      port: 8080
+    ### Number of seconds after the container has started before liveness probes are initiated
+    initialDelaySeconds: 5
+    ### Number of seconds after which the probe times out
+    timeoutSeconds: 3
+    ### How often (in seconds) to perform the probe
+    periodSeconds: 5
+    ### Minimum consecutive failures for the probe to be considered failed after having succeeded
+    failureThreshold: 10
+    ### Minimum consecutive successes for the probe to be considered successful after having failed
+    successThreshold: 1

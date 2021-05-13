@@ -1,0 +1,7 @@
+{{- $root := . -}}
+{{- $name := default $root.Values.name .Chart.Name -}}
+{{- $namespace := default $name $root.Values.namespace -}}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ $namespace }}
