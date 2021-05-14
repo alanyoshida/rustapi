@@ -17,7 +17,7 @@ pub struct MyResponse {
 }
 
 #[rocket::get("/")]
-fn hello_world() -> Json<MyResponse> {
+fn home() -> Json<MyResponse> {
    Json(MyResponse { key: String::from("Hello"), value: String::from("World") })
 }
 
@@ -36,7 +36,7 @@ fn main() -> Result<(), StdErr> {
     logger::init()?;
 
     rocket::ignite()
-       .mount("/", rocket::routes![hello_world])
+       .mount("/", rocket::routes![home])
        .mount("/", rocket::routes![readiness])
        .mount("/", rocket::routes![liveness])
        .launch();
