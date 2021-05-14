@@ -1,3 +1,7 @@
+images:
+- name: alanyoshida/rustapi
+  newTag: latest
+
 resources:
 - ./../../base
 
