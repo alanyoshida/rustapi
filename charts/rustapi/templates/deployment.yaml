@@ -1,5 +1,5 @@
 {{- $root := . -}}
-{{- $name := default $root.Values.name .Chart.Name -}}
+{{- $name := default .Chart.Name $root.Values.name -}}
 {{- $namespace := default $name $root.Values.namespace -}}
 apiVersion: apps/v1
 kind: Deployment
