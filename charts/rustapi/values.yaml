@@ -1,6 +1,6 @@
 name: "rustapi"
 namespace: "rustapi"
-port: 8080
+port: 8000
 image: alanyoshida/rustapi
 serviceType: "ClusterIP"
 terminationGracePeriodSeconds: 10
@@ -25,7 +25,7 @@ probes:
   readinessProbe:
     httpGet:
       path: /health-check/readiness
-      port: 8080
+      port: 8000
     ### Number of seconds after the container has started before liveness probes are initiated
     initialDelaySeconds: 5
     ### Number of seconds after which the probe times out
@@ -40,7 +40,7 @@ probes:
   livenessProbe:
     httpGet:
       path: /health-check/liveness
-      port: 8080
+      port: 8000
     ### Number of seconds after the container has started before liveness probes are initiated
     initialDelaySeconds: 5
     ### Number of seconds after which the probe times out
